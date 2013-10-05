@@ -51,7 +51,10 @@ private:
 
 class arith_expr_node: public syntax_node {
 public:
-	arith_expr_node(pointer<syntax_node> left, char op, pointer<syntax_node> right):
+	typedef enum { arith_add, arith_sub } arith_t;
+
+public:
+	arith_expr_node(pointer<syntax_node> left, arith_t op, pointer<syntax_node> right):
 		_left(left), _op(op), _right(right) {}
 
 	unsigned int eval() {
@@ -59,10 +62,10 @@ public:
 		unsigned int rval = _right->eval();
 
 		switch(_op) {
-		  case '+':
+		  case arith_add:
 			return lval + rval;
 			break;
-		  case '-':
+		  case arith_sub:
 			return lval - rval;
 		}
 	}

@@ -73,11 +73,11 @@ a_expr:
 	  expr { $$ =  $1; }
 	| expr token_aop_add expr 
 		{ 
-			$$ = new arith_expr_node($1, '+', $3);
+			$$ = new arith_expr_node($1, arith_expr_node::arith_add, $3);
 		}
 	| expr token_aop_sub expr 
 		{ 
-			$$ = new arith_expr_node($1, '-', $3);
+			$$ = new arith_expr_node($1, arith_expr_node::arith_sub, $3);
 		}
 	;
 
