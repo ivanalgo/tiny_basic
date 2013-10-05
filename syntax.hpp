@@ -15,6 +15,7 @@ public:
 	virtual unsigned int eval() { throw exception(); }
 	virtual unsigned int *leval() { throw exception(); }
 	virtual void exec() { throw exception(); }
+	virtual ~syntax_node() {}
 };
 
 class var_node: public syntax_node {
@@ -55,7 +56,7 @@ public:
 
 	unsigned int eval() {
 		unsigned int lval = _left->eval();
-		unsigned int rval = _left->eval();
+		unsigned int rval = _right->eval();
 
 		switch(_op) {
 		  case '+':

@@ -41,7 +41,7 @@ void yyerror(const char *msg)
 %token token_aop_add
 %token token_aop_sub
 
-%type <tree> assign_stat if_stat while_stat print_stat 
+%type <tree> statm assign_stat if_stat while_stat print_stat 
 %type <tree>  expr a_expr l_expr
 
 %%
@@ -52,12 +52,16 @@ program:
 	;
 
 line: statm token_newline
+	{
+		$1->exec();
+		delete $1;
+	}
 
 statm: 
-	  assign_stat { $1->exec(); }
-	| if_stat { $1->exec(); }
-	| while_stat {$1->exec(); }
-	| print_stat { $1->exec(); }
+	  assign_stat { $$ = $1; }
+	| if_stat { $$ = $1; }
+	| while_stat {$$ = $1; }
+	| print_stat { $$ = $1; }
 	;
 
 expr: 
