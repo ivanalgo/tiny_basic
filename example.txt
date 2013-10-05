@@ -1,0 +1,11 @@
+a = 1
+a = a + 1
+print a
+b = 2
+if a==b then c = 0 else c = 1
+print c
+if a!=b then d = 0 else d = 1
+print d
+while a != 10 do a = a + 1
+print a
+
