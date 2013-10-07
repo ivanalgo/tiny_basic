@@ -46,6 +46,14 @@ assign "="
 	return token_then;
 }
 
+"endif" {
+	return token_endif;
+}
+
+"endwhile" {
+	return token_endwhile;
+}
+
 {while} {
 	return token_while;
 }

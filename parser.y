@@ -20,8 +20,8 @@ void yyerror(const char *msg)
 %}
 
 %union {
-	int value;
 	class syntax_node *tree;	
+	class block_stat_node *stats;
 }
 
 %token <tree> token_num
@@ -29,8 +29,10 @@ void yyerror(const char *msg)
 %token token_if
 %token token_else
 %token token_then
+%token token_endif
 %token token_while
 %token token_do
+%token token_endwhile
 %token token_print
 %token token_assign
 %token token_space
@@ -41,23 +43,22 @@ void yyerror(const char *msg)
 %token token_aop_add
 %token token_aop_sub
 
-%type <tree> statm assign_stat if_stat while_stat print_stat 
+%type <tree> statement assign_stat if_stat while_stat print_stat 
 %type <tree>  expr a_expr l_expr
+%type <stats> block_stat
 
 %%
 
 program: 
-	  program line 
+	  program statement 
+		{
+			$2->exec();
+			delete $2;
+		}
 	|
 	;
 
-line: statm token_newline
-	{
-		$1->exec();
-		delete $1;
-	}
-
-statm: 
+statement: 
 	  assign_stat { $$ = $1; }
 	| if_stat { $$ = $1; }
 	| while_stat {$$ = $1; }
@@ -95,33 +96,46 @@ l_expr:
 		}
 	;
 
-assign_stat: token_var token_assign a_expr 
+assign_stat: token_var token_assign a_expr token_newline
 		{ 
 			$$ = new assign_node($1, $3);
 		}
 	;
 
 if_stat:
-	  token_if l_expr token_then assign_stat
+	  token_if l_expr token_then token_newline block_stat token_endif token_newline
 		{
-			$$ = new if_else_node($2, $4);
+			$$ = new if_else_node($2, $5);
 		}
 
-	| token_if l_expr token_then assign_stat token_else assign_stat
+	| token_if l_expr token_then token_newline block_stat token_else token_newline block_stat token_endif token_newline
 		{
-			$$ = new if_else_node($2, $4, $6);
+			$$ = new if_else_node($2, $5, $8);
 		}
 	;
 
-while_stat:
-	  token_while l_expr token_do assign_stat
+block_stat:
+	  block_stat statement
 		{
-			$$ = new while_node($2, $4);
+			$1->add_stat($2);
+			$$ = $1;	
+		}
+	| 
+		{
+			$$ = new block_stat_node();
+		}
+	;
+	  
+
+while_stat:
+	  token_while l_expr token_do token_newline block_stat token_endwhile token_newline
+		{
+			$$ = new while_node($2, $5);
 		}
 	;
 
 print_stat:
-	  token_print token_var 
+	  token_print token_var token_newline
 		{
 			$$ = new print_node($2);
 		}

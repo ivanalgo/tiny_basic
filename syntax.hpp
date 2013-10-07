@@ -4,6 +4,7 @@
 #include <exception>
 #include <string>
 #include <iostream>
+#include <vector>
 
 #include "pointer.hpp"
 #include "sym.hpp"
@@ -169,6 +170,24 @@ public:
 private:
 	pointer<syntax_node> _cond;
 	pointer<syntax_node> _assign;
+};
+
+class block_stat_node: public syntax_node {
+public:
+	void add_stat(pointer<syntax_node> stat) {
+		_stats.push_back(stat);	
+	}
+
+	void exec() {
+		for(vector<pointer<syntax_node> >::iterator it = _stats.begin();
+		    it != _stats.end();
+		    ++it) {
+			(*it)->exec();
+		}
+	}
+
+private:
+	vector<pointer<syntax_node> > _stats;
 };
 
 #endif
