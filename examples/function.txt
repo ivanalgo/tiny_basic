@@ -1,0 +1,11 @@
+function sum(a, b)
+  sum = a + b
+endfunc
+function sum(a)
+  sum = a + b
+endfunc
+function sum(a)
+  sum = a + b
+endfunc
+c = 1
+print c
