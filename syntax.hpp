@@ -179,7 +179,7 @@ public:
 	}
 
 	void exec() {
-		for(vector<pointer<syntax_node> >::iterator it = _stats.begin();
+		for(auto it = _stats.begin();
 		    it != _stats.end();
 		    ++it) {
 			(*it)->exec();

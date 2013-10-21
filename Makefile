@@ -4,7 +4,7 @@ OBJS = parser.o  \
        token.o  \
        sym.o     
 
-CPPFLAGS = -Wall -g 
+CPPFLAGS = -Wall -g -std=c++0x
 
 clean:
 	$(RM) -rf parser.cpp parser.hpp basic token.cpp $(OBJS)
