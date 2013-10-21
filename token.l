@@ -34,47 +34,47 @@ assign "="
 
 %%
 
-{if} {
-	return token_if;
+"if" {
+	return IF;
 }
 
-{else} {
-	return token_else;
+"else" {
+	return ELSE;
 }
 
-{then} {
-	return token_then;
+"THEN" {
+	return THEN;
 }
 
 "endif" {
-	return token_endif;
+	return ENDIF;
 }
 
 "endwhile" {
-	return token_endwhile;
+	return ENDWHILE;
 }
 
-{while} {
-	return token_while;
+"while" {
+	return WHILE;
 }
 
-{do} {
-	return token_do;
+"do" {
+	return DO;
 }
 
-{print} {
-	return token_print;
+"print" {
+	return PRINT;
 }
 
 {number} {
 	yylval.tree = new imm_node(atoi(yytext));
-	return token_num;
+	return NUM;
 }
 
 {var} {
 	yylval.tree = new var_node(string(yytext));
 
-	return token_var;
+	return VAR;
 }
 
 {space} {
@@ -102,7 +102,7 @@ assign "="
 }
 
 {newline} {
-	return token_newline;
+	return NEWLINE;
 }
 
 "." {

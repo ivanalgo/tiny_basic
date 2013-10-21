@@ -24,20 +24,20 @@ void yyerror(const char *msg)
 	class block_stat_node *stats;
 }
 
-%token <tree> token_num
-%token <tree> token_var
-%token token_if
-%token token_else
-%token token_then
-%token token_endif
-%token token_while
-%token token_do
-%token token_endwhile
-%token token_print
+%token <tree> NUM
+%token <tree> VAR
+%token IF
+%token ELSE
+%token THEN
+%token ENDIF
+%token WHILE
+%token DO
+%token ENDWHILE
+%token PRINT
 %token token_assign
 %token token_space
 %token token_ospace
-%token token_newline
+%token NEWLINE
 %token token_lop_equal
 %token token_lop_nequal
 %token token_aop_add
@@ -66,8 +66,8 @@ statement:
 	;
 
 expr: 
-	  token_var { $$ = $1; }
-	| token_num { $$ = $1; }
+	  VAR { $$ = $1; }
+	| NUM { $$ = $1; }
 	;
 
 a_expr: 
@@ -96,19 +96,19 @@ l_expr:
 		}
 	;
 
-assign_stat: token_var token_assign a_expr token_newline
+assign_stat: VAR token_assign a_expr NEWLINE
 		{ 
 			$$ = new assign_node($1, $3);
 		}
 	;
 
 if_stat:
-	  token_if l_expr token_then token_newline block_stat token_endif token_newline
+	  IF l_expr THEN NEWLINE block_stat ENDIF NEWLINE
 		{
 			$$ = new if_else_node($2, $5);
 		}
 
-	| token_if l_expr token_then token_newline block_stat token_else token_newline block_stat token_endif token_newline
+	| IF l_expr THEN NEWLINE block_stat ELSE NEWLINE block_stat ENDIF NEWLINE
 		{
 			$$ = new if_else_node($2, $5, $8);
 		}
@@ -128,14 +128,14 @@ block_stat:
 	  
 
 while_stat:
-	  token_while l_expr token_do token_newline block_stat token_endwhile token_newline
+	  WHILE l_expr DO NEWLINE block_stat ENDWHILE NEWLINE
 		{
 			$$ = new while_node($2, $5);
 		}
 	;
 
 print_stat:
-	  token_print token_var token_newline
+	  PRINT VAR NEWLINE
 		{
 			$$ = new print_node($2);
 		}
