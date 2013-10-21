@@ -69,6 +69,8 @@ public:
 		  case arith_sub:
 			return lval - rval;
 		}
+
+		throw exception();
 	}
 	
 private:
@@ -98,6 +100,8 @@ public:
 			return lval != rval;
 			break;
 		}
+
+		throw exception();
 	}	
 
 private:
@@ -188,6 +192,18 @@ public:
 
 private:
 	vector<pointer<syntax_node> > _stats;
+};
+
+class function_node: public syntax_node {
+public:
+	function_node(vector<string> args, pointer<syntax_node> stats):
+		_args(args), _stats(stats) {}
+	void exec() {
+	}
+
+private:
+	vector<string> _args;
+	pointer<syntax_node> _stats;
 };
 
 #endif

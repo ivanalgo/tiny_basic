@@ -1,6 +1,7 @@
 
 %{
 #include <string>
+#include <vector>
 
 #include <stdlib.h>
 #include "parser.hpp"
@@ -11,6 +12,7 @@ using namespace std;
 %}
 
 %option noyywrap
+%option yylineno
 
 number [0-9]+
 var [a-zA-Z][a-zA-Z0-9]*
@@ -26,11 +28,6 @@ print "print"
 
 lop_equal "=="
 lop_nequal "!="
-
-aop_add "+"
-aop_sub "-"
-
-assign "="
 
 %%
 
@@ -66,13 +63,21 @@ assign "="
 	return PRINT;
 }
 
+"function" {
+	return FUNC;
+}
+
+"endfunc" {
+	return ENDFUNC;
+}
+
 {number} {
 	yylval.tree = new imm_node(atoi(yytext));
 	return NUM;
 }
 
 {var} {
-	yylval.tree = new var_node(string(yytext));
+	yylval.var = new string(yytext);
 
 	return VAR;
 }
@@ -89,20 +94,12 @@ assign "="
 	return token_lop_nequal;
 }
 
-{aop_add} {
-	return token_aop_add;
-}
-
-{aop_sub} {
-	return token_aop_sub;
-}
-
-{assign} {
-	return token_assign;
-}
-
 {newline} {
 	return NEWLINE;
+}
+
+[(),=+-] {
+	return *yytext;
 }
 
 "." {
